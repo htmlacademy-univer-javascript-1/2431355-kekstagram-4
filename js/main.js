@@ -57,7 +57,24 @@ const getRandomInt = (min, max) => {
   const upper = Math.floor(Math.max(min, max));
   const result = Math.random() * (upper - lower + 1) + lower;
   return Math.floor(result);
-}
+};
+
+const addComment = () => {
+  return {
+    id: getRandomInt(ID.MIN, ID.MAX),
+    avatar: `img/avatar-${getRandomInt(1, 6)}.svg`,
+    name: NAMES[getRandomInt(0, NAMES.length - 1)],
+    message: TEXT[getRandomInt(0, TEXT.length - 1)],
+  }
+};
+
+const addComments = () => {
+  const comments = [];
+  for (let i = 0; i <= getRandomInt(COMMENTS_COUNT.MIN, COMMENTS_COUNT.MAX); i++){
+    comments.push(addComment());
+  }
+  return comments;
+};
 
 const addPhoto = (index) => {
   return {
@@ -74,23 +91,6 @@ const addPhotos = () => {
     photos.push(addPhoto(i));
   }
   return photos;
-};
-
-const addComment = () => {
-  return {
-    id: getRandomInt(ID.MIN, ID.MAX),
-    avatar: `img/avatar-${getRandomInt(1, 6)}.svg`,
-    name: NAMES[getRandomInt(0, NAMES.length - 1)],
-    message: TEXT[getRandomInt(0, TEXT.length - 1)]
-  }
-};
-
-const addComments = () => {
-  const comments = [];
-  for (let i = 0; i <= getRandomInt(COMMENTS_COUNT.MIN, COMMENTS_COUNT.MAX); i++){
-    comments.push(addComment());
-  }
-  return comments;
 };
 
 addPhotos();
