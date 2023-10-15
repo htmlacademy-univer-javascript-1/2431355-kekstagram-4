@@ -60,12 +60,13 @@ const getRandomInt = (min, max) => {
 };
 
 const addComment = () => {
-  return {
+  const comment = {
     id: getRandomInt(ID.MIN, ID.MAX),
     avatar: `img/avatar-${getRandomInt(1, 6)}.svg`,
     name: NAMES[getRandomInt(0, NAMES.length - 1)],
     message: TEXT[getRandomInt(0, TEXT.length - 1)],
-  }
+  };
+  return comment;
 };
 
 const addComments = () => {
@@ -77,13 +78,14 @@ const addComments = () => {
 };
 
 const addPhoto = (index) => {
-  return {
+  const photo = {
     id: index,
     url: `photos/${index}.jpg`,
     description: DESCRIPTONS[getRandomInt(0, DESCRIPTONS.length - 1)],
     likes: getRandomInt(LIKES.MIN, LIKES.MAX),
     comments: addComments(),
   };
+  return photo;
 };
 
 const addPhotos = () => {
