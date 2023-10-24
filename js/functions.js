@@ -1,22 +1,20 @@
-const checkStringLength = (text, length) => text.length <= length;
-
-const checkPalindromeString = (str) => {
-  str = str.toLowerCase().replaceAll(' ', '');
-  const reversedString = str.split('').reverse().join('');
-  return str === reversedString;
+const countNumberOfMinutes = (time) =>{
+  const splitTime = time.split(':');
+  return Number(splitTime[0]) * 60 + Number(splitTime[1]);
 };
 
-const findNumber = (text) => {
-  let newString = '';
-  text = text.toString();
-  for (let i = 0; i < text.length; i++) {
-    if (!isNaN(parseInt(text[i], 10))) {
-      newString += text[i];
-    }
+const isMeetingPossible = (beginTime, endTime, beginTimeMeeting, duration) => {
+  beginTime = countNumberOfMinutes(beginTime);
+  endTime = countNumberOfMinutes(endTime);
+  beginTimeMeeting = countNumberOfMinutes(beginTimeMeeting);
+  if (beginTime < endTime && beginTimeMeeting + duration <= endTime && beginTimeMeeting >= beginTime) {
+    return true;
   }
-  return parseInt(newString, 10);
+  return false;
 };
 
-findNumber('today is 07 october');
-checkPalindromeString('TeneT');
-checkStringLength('html academy', 20);
+isMeetingPossible('08:00', '17:30', '14:00', 90);
+isMeetingPossible('8:0', '10:0', '8:0', 120);
+isMeetingPossible('08:00', '14:30', '14:00', 90);
+isMeetingPossible('14:00', '17:30', '08:0', 90);
+isMeetingPossible('8:00', '17:30', '08:00', 900);
