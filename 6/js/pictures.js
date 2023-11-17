@@ -1,5 +1,5 @@
-let pictures = document.querySelector('.pictures')
-let pictureTemplate = document.querySelector('#picture').content.querySelector('.picture')
+const pictures = document.querySelector('.pictures');
+const pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
 
 const renderPhoto = (photo) => {
   const pictureElement = pictureTemplate.cloneNode(true);
@@ -8,14 +8,14 @@ const renderPhoto = (photo) => {
   pictureElement.querySelector('.picture__likes').textContent = photo.likes;
   pictureElement.querySelector('.picture__comments').textContent = photo.comments.length;
   return pictureElement;
-}
+};
 
 const renderPhotos = (photos) => {
   const fragment = document.createDocumentFragment();
-  photos.forEach(photo => {
-    fragment.appendChild(renderPhoto(photo))
+  photos.forEach((photo) => {
+    fragment.appendChild(renderPhoto(photo));
   });
   pictures.appendChild(fragment);
-}
+};
 
 export {renderPhotos};
