@@ -90,5 +90,5 @@ const addPhotos = () => {
   }
   return photos;
 };
-
-export {addPhotos};
+addPhotos();
+export {photos};
