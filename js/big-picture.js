@@ -41,10 +41,10 @@ const renderBigPicture = (data) =>{
 const closeBigPicture = () => {
   bigPicture.classList.add('hidden');
   document.body.classList.remove('modal-open');
-  document.removeEventListener('keydown', onDocumentKeyDown)
-}
+  document.removeEventListener('keydown', onDocumentKeyDown);
+};
 
-const onDocumentKeyDown = (evt) => {
+function onDocumentKeyDown(evt) {
   if (evt.key === 'Escape') {
     evt.preventDefault();
     closeBigPicture();
@@ -68,9 +68,9 @@ const showBigPicture = (data, picture) => {
   hideStatisticsElements(picture);
   showImageAndComments(data);
 
-  document.addEventListener('keydown', onDocumentKeyDown)
-  pictureCloseButton.addEventListener('click', closeBigPicture)
-}
+  document.addEventListener('keydown', onDocumentKeyDown);
+  pictureCloseButton.addEventListener('click', closeBigPicture);
+};
 
 const initPictures = (pictures) => {
   picturesContainer.addEventListener('click', (evt) =>{
