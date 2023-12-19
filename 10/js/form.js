@@ -8,6 +8,17 @@ const closeButton = body.querySelector('#upload-cancel');
 const effects = document.querySelectorAll('.effects__preview');
 const mainPicture = document.querySelector('.img-upload__preview img');
 
+const changeImages = () => {
+  const file = fileUpload.files[0];
+  const fileUrl = URL.createObjectURL(file);
+
+  mainPicture.src = fileUrl;
+
+  effects.forEach((effect) => {
+    effect.style.backgroundImage = `url('${fileUrl}')`;
+  });
+};
+
 fileUpload.addEventListener('change', () => {
   uploadOverlay.classList.remove('hidden');
   body.classList.add('modal-open');
@@ -43,16 +54,3 @@ function onCloseFormEscDown (evt) {
     closeForm();
   }
 }
-const changeImages = () => {
-  const file = fileUpload.files[0];
-  const fileUrl = URL.createObjectURL(file);
-
-  mainPicture.src = fileUrl;
-
-  effects.forEach((effect) => {
-    effect.style.backgroundImage = `url('${fileUrl}')`;
-  });
-};
-
-
-
