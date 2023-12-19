@@ -1,7 +1,7 @@
 import { photos } from './data.js';
-import { renderPhotos } from './pictures.js';
-import { initializePictures } from './big-picture.js';
+import { createPictures } from './pictures.js';
+import './big-picture.js';
+import './form.js';
+import './validate-form.js';
 
-renderPhotos(photos);
-
-initializePictures(photos);
+createPictures(photos);
