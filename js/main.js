@@ -4,6 +4,7 @@ import './validate-form.js';
 import './effects.js';
 import { openForm } from './form.js';
 import { loadData } from './api.js';
+import { initFilters } from './filters.js';
 
 let pictures = [];
 
@@ -35,6 +36,9 @@ const onFail = () =>{
 loadData(onSuccess, onFail);
 openForm();
 
+initFilters();
+
+export {pictures};
 // import { initForm } from './form.js';
 // import { photos } from './data.js';
 // createPictures(photos);
