@@ -1,6 +1,8 @@
 import { isEscKey } from './util.js';
 import { pristine } from './validate-form.js';
 import { initRadios, resetFilters } from './effects.js';
+import { uploadData } from './api.js';
+import { onSuccess, onFail } from './form-submit.js';
 
 const body = document.querySelector('body');
 const formUpload = document.querySelector('.img-upload__form');
@@ -22,12 +24,20 @@ const Zoom = {
   MAX: 100,
 };
 
-const initForm = () => {
+const onFormUploadSubmit = (evt) => {
+  evt.preventDefault();
+  const formData = new FormData(evt.target);
+  uploadData(onSuccess, onFail, 'POST', formData);
+};
+
+
+const openForm = () => {
   closeButton.addEventListener('click', onCloseFormClick);
   document.addEventListener('keydown', onCloseFormEscDown);
 
   fileUpload.addEventListener('change', onFileUploadChange);
   scaleControl.value = '100%';
+  formUpload.addEventListener('submit', onFormUploadSubmit);
 };
 
 const changeZoom = (factor = 1) => {
@@ -66,6 +76,8 @@ const closeForm =  () => {
 
   closeButton.removeEventListener('click', onCloseFormClick);
   document.removeEventListener('keydown', onCloseFormEscDown);
+  formUpload.removeEventListener('submit', onFormUploadSubmit);
+
   formUpload.reset();
   pristine.reset();
 
@@ -83,7 +95,7 @@ function onCloseFormClick (evt) {
 function onCloseFormEscDown (evt) {
   if(isEscKey(evt) &&
   !evt.target.classList.contains('text__hashtag') &&
-  !evt.target.classList.contains('text__description'))
+  !evt.target.classList.contains('text__description') && !body.querySelector('.error'))
   {
     evt.preventDefault();
     closeForm();
@@ -106,11 +118,11 @@ function onFileUploadChange () {
   uploadOverlay.classList.remove('hidden');
   body.classList.add('modal-open');
 
-  initForm();
+  openForm();
   changeImages();
   initButtons();
   initRadios();
 }
 
 
-export {initForm};
+export {openForm, closeForm};

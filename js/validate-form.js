@@ -17,7 +17,7 @@ const commentField = document.querySelector('.text__description');
 
 let errorMessage = '';
 
-const error =  () => errorMessage;
+const error = () => errorMessage;
 
 const hashtagHandler = (value) =>{
   errorMessage = '';
@@ -68,12 +68,12 @@ const hashtagHandler = (value) =>{
   });
 };
 
-const onHashtagInput = (item) =>{
-  if(item.validate){
-    submitBtn.disabled = true;
+const onHashtagInput = () =>{
+  if(pristine.validate()){
+    submitBtn.disabled = false;
   }
   else{
-    submitBtn.disabled = false;
+    submitBtn.disabled = true;
   }
 };
 
@@ -87,7 +87,6 @@ pristine.addValidator(commentField, validateComment, 'Комментарий д�
 inputHashtag.addEventListener('input', onHashtagInput);
 formUpload.addEventListener('submit', (evt) => {
   evt.preventDefault();
-  onHashtagInput(evt);
   pristine.validate();
 });
 export {pristine};
