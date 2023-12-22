@@ -23,12 +23,12 @@ const hashtagHandler = (value) =>{
 
   const inputText = value.toLowerCase().trim();
 
-  if(!inputText) {
+  if (!inputText) {
     return true;
   }
 
   const inputArray = inputText.split(/\s+/);
-  if(inputArray.length === 0){
+  if (inputArray.length === 0) {
     return true;
   }
 
