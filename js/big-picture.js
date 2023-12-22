@@ -1,57 +1,50 @@
-import {isEscKey} from './util.js';
+import { isEscKey } from './util.js';
 
-const commentTemplate = document.querySelector('#comments').content.querySelector('li');
+const COMMENTS_STEP =  5;
 
 const body = document.body;
-
+const commentTemplate = document.querySelector('#comments').content.querySelector('li');
 const bigPictureForm = document.querySelector('.big-picture');
 const bigPictureImage = bigPictureForm.querySelector('.big-picture__img img');
 const bigPictureLikes = bigPictureForm.querySelector('.big-picture__social .likes-count');
 const bigPictureDescription = bigPictureForm.querySelector('.big-picture__social .social__caption');
 const bigPictureCommentsCount = bigPictureForm.querySelector('.social__comment-count');
-
-
-const socials = document.querySelector('.social__comments');
-
+const socialComments = document.querySelector('.social__comments');
 const closeButton = document.querySelector('#picture-cancel');
+const commentLoader = document.querySelector('.comments-loader');
 
-const COMMENTS_STEP =  5;
-const loader = document.querySelector('.comments-loader');
 let currentComments = [];
 let visiableCommentsCount;
 
 const renderComment = (comment) =>{
   const currentComment = commentTemplate.cloneNode(true);
-
   currentComment.querySelector('.social__picture').src = comment.avatar;
   currentComment.querySelector('.social__picture').alt = comment.name;
   currentComment.querySelector('.social__text').textContent = comment.message;
-  return(currentComment);
+  return currentComment;
 };
 
 const renderComments = (comments) => {
   const commentFragment = document.createDocumentFragment();
-
   comments.forEach((element) => {
     commentFragment.append(renderComment(element));
   });
-
   return commentFragment;
 };
 
 const createComments = () => {
-  socials.innerHTML = '';
+  socialComments.innerHTML = '';
   visiableCommentsCount  = Math.min(visiableCommentsCount, currentComments.length);
   const commentsSelected = currentComments.slice(0, visiableCommentsCount);
 
   if (currentComments.length <= COMMENTS_STEP || visiableCommentsCount >= currentComments.length){
-    loader.classList.add('hidden');
+    commentLoader.classList.add('hidden');
   }
   else {
-    loader.classList.remove('hidden');
+    commentLoader.classList.remove('hidden');
   }
   bigPictureCommentsCount.textContent = `${visiableCommentsCount} из ${currentComments.length} комментариев`;
-  socials.append(renderComments(commentsSelected));
+  socialComments.append(renderComments(commentsSelected));
 };
 
 const onLoadNewComments = (evt) => {
@@ -60,46 +53,45 @@ const onLoadNewComments = (evt) => {
   createComments();
 };
 
-const renderBigPicture = (data) =>{
+const renderBigPhoto = (data) =>{
   bigPictureImage.src = data.url;
   bigPictureLikes.textContent = data.likes;
   bigPictureDescription.textContent = data.description;
   bigPictureCommentsCount.textContent = data.comments.length;
 };
 
-const closeBigPicture = () => {
+const closeBigPhoto = () => {
   bigPictureForm.classList.add('hidden');
   body.classList.remove('modal-open');
   document.removeEventListener('keydown', onDocumentKeyDown);
-  loader.removeEventListener('click', onLoadNewComments);
+  commentLoader.removeEventListener('click', onLoadNewComments);
 };
 
 function onDocumentKeyDown (evt) {
   if(isEscKey(evt)){
     evt.preventDefault();
-    closeBigPicture();
+    closeBigPhoto();
   }
 }
 
 const displayImageAndComments = (data) => {
-  renderBigPicture(data);
+  renderBigPhoto(data);
   createComments();
 };
 
-const showBigPicture = (picture) => {
+const showBigPhoto = (photo) => {
   bigPictureForm.classList.remove('hidden');
   body.classList.add('modal-open');
 
-
-  currentComments = picture.comments;
+  currentComments = photo.comments;
   currentComments.slice();
   visiableCommentsCount = COMMENTS_STEP;
 
-  displayImageAndComments(picture);
+  displayImageAndComments(photo);
 
   document.addEventListener('keydown', onDocumentKeyDown);
-  closeButton.addEventListener('click', closeBigPicture);
-  loader.addEventListener('click', onLoadNewComments);
+  closeButton.addEventListener('click', closeBigPhoto);
+  commentLoader.addEventListener('click', onLoadNewComments);
 };
 
-export {showBigPicture};
+export {showBigPhoto};

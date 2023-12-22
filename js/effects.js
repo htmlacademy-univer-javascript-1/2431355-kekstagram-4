@@ -3,25 +3,21 @@ const DEFAULT_EFFECT_LEVEL = 100;
 const EFFECTS_STEP = 0.01;
 const MAX_BLUR_VALUE = 3;
 const MAX_BRIGHTNESS = 3;
-
-
 const SLIDER = {
   MIN: 10,
   MAX: 100,
   STEP: 10,
 };
 
-const sliderElement = document.querySelector('.effect-level__slider');
-const sliderUpload = document.querySelector('.img-upload__effect-level');
-const currentSlider = document.querySelector('.effect-level__slider');
-const filterRadios = document.querySelectorAll('.effects__item');
-const picture = document.querySelector('.img-upload__preview img');
+const formUpload = document.querySelector('.img-upload__form');
+const sliderElement = formUpload.querySelector('.effect-level__slider');
+const sliderUpload = formUpload.querySelector('.img-upload__effect-level');
+const currentSlider = formUpload.querySelector('.effect-level__slider');
+const filterRadios = formUpload.querySelectorAll('.effects__item');
+const picture = formUpload.querySelector('.img-upload__preview img');
 
-let currentRadio = document.querySelector('.effects__radio').value;
-
-
+let currentRadio = formUpload.querySelector('.effects__radio').value;
 currentSlider.value = DEFAULT_EFFECT_LEVEL;
-
 
 const FILTERS = {
   none: () => {
@@ -51,7 +47,6 @@ const FILTERS = {
     return `brightness(${(parseInt(currentSlider.value, RADIX) * EFFECTS_STEP) * MAX_BRIGHTNESS})`;
   },
 };
-
 
 const onNoUiSliderChange = () => {
   currentSlider.value = sliderElement.noUiSlider.get();
@@ -92,4 +87,5 @@ noUiSlider.create(sliderElement, {
   step: SLIDER.STEP,
   connect: 'lower',
 });
+
 export {initRadios,  resetFilters};
