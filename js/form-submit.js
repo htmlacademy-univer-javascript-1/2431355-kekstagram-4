@@ -21,7 +21,7 @@ const onBodyKeyDown = (evt) => {
   }
 };
 
-function closeMessage () {
+function closeMessage() {
   body.removeEventListener('click', onBodyClick);
   document.removeEventListener('keydown', onBodyKeyDown);
   body.removeChild(body.lastChild);
