@@ -1,22 +1,22 @@
 import { isEscKey } from './util.js';
 import { pristine } from './validate-form.js';
 import { initRadios, resetFilters } from './effects.js';
-import { uploadData } from './api.js';
-import { onSuccess, onFail } from './form-submit.js';
+import { sendData } from './api.js';
+import { onSuccess, onError } from './form-submit.js';
+
+const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 
 const body = document.querySelector('body');
 const formUpload = document.querySelector('.img-upload__form');
-const fileUpload = document.querySelector('#upload-file');
-const uploadOverlay = document.querySelector('.img-upload__overlay');
-const closeButton = document.querySelector('#upload-cancel');
-
+const fileUpload = formUpload.querySelector('#upload-file');
+const mainPicture = formUpload.querySelector('.img-upload__preview img');
+const uploadOverlay = formUpload.querySelector('.img-upload__overlay');
+const closeButton = formUpload.querySelector('#upload-cancel');
+const imagePreview = formUpload.querySelector('.img-upload__preview img');
 const effects = document.querySelectorAll('.effects__preview');
-const mainPicture = document.querySelector('.img-upload__preview img');
-
 const plusButton = document.querySelector('.scale__control--bigger');
 const minusButton = document.querySelector('.scale__control--smaller');
 const scaleControl = document.querySelector('.scale__control--value');
-const imagePreview = document.querySelector('.img-upload__preview img');
 
 const Zoom = {
   STEP: 25,
@@ -27,14 +27,12 @@ const Zoom = {
 const onFormUploadSubmit = (evt) => {
   evt.preventDefault();
   const formData = new FormData(evt.target);
-  uploadData(onSuccess, onFail, 'POST', formData);
+  sendData(onSuccess, onError, 'POST', formData);
 };
-
 
 const openForm = () => {
   closeButton.addEventListener('click', onCloseFormClick);
   document.addEventListener('keydown', onCloseFormEscDown);
-
   fileUpload.addEventListener('change', onFileUploadChange);
   scaleControl.value = '100%';
   formUpload.addEventListener('submit', onFormUploadSubmit);
@@ -42,45 +40,50 @@ const openForm = () => {
 
 const changeZoom = (factor = 1) => {
   let size = parseInt(scaleControl.value, 10) + (Zoom.STEP * factor);
-
-  if(size < Zoom.MIN){
+  if (size < Zoom.MIN){
     size = Zoom.MIN;
     return;
   }
-  if(size > Zoom.MAX){
+  if (size > Zoom.MAX){
     size = Zoom.MAX;
     return;
   }
-
   scaleControl.value = `${size}%`;
   imagePreview.style.transform = `scale(${size / 100})`;
 };
 
+const onMinusButtonClick = () => {
+  changeZoom(-1);
+};
+
+const onPlusButtonClick = () => {
+  changeZoom(1);
+};
+
 const initButtons = () => {
-
-  const onMinusButtonClick = () => {
-    changeZoom(-1);
-  };
-
-  const onPlusButtonClick = () => {
-    changeZoom(1);
-  };
 
   minusButton.addEventListener('click', onMinusButtonClick);
   plusButton.addEventListener('click', onPlusButtonClick);
+};
+
+const removeEvents = () => {
+  closeButton.removeEventListener('click', onCloseFormClick);
+  document.removeEventListener('keydown', onCloseFormEscDown);
+  formUpload.removeEventListener('submit', onFormUploadSubmit);
+
+  minusButton.removeEventListener('click', onMinusButtonClick);
+  plusButton.removeEventListener('click', onPlusButtonClick);
+
 };
 
 const closeForm =  () => {
   uploadOverlay.classList.add('hidden');
   body.classList.remove('modal-open');
 
-  closeButton.removeEventListener('click', onCloseFormClick);
-  document.removeEventListener('keydown', onCloseFormEscDown);
-  formUpload.removeEventListener('submit', onFormUploadSubmit);
+  removeEvents();
 
   formUpload.reset();
   pristine.reset();
-
   scaleControl.value = '100%';
   imagePreview.style.transform = 'scale(100%)';
 
@@ -104,15 +107,16 @@ function onCloseFormEscDown (evt) {
 
 const changeImages = () => {
   const file = fileUpload.files[0];
-  const fileUrl = URL.createObjectURL(file);
+  const fileName = file.name.toLowerCase();
 
-  mainPicture.src = fileUrl;
+  if(FILE_TYPES.some((it) => fileName.endsWith(it))){
+    mainPicture.src = URL.createObjectURL(file);
 
-  effects.forEach((effect) => {
-    effect.style.backgroundImage = `url('${fileUrl}')`;
-  });
+    effects.forEach((effect) => {
+      effect.style.backgroundImage = `url('${mainPicture.src}')`;
+    });
+  }
 };
-
 
 function onFileUploadChange () {
   uploadOverlay.classList.remove('hidden');
@@ -123,6 +127,5 @@ function onFileUploadChange () {
   initButtons();
   initRadios();
 }
-
 
 export {openForm, closeForm};

@@ -1,28 +1,27 @@
-import { debounce, shuffle } from './util.js';
-import {pictures} from './main.js';
-import {createPictures, removePictures} from './pictures.js';
+import { debounce, shuffleArray } from './util.js';
+import { photos } from './main.js';
+import { renderPhotos, removePhotos } from './pictures.js';
 
-const RANDOM_PICTURES_MAX = 10;
+const RANDOM_PICTURES_COUNT = 10;
 
 const filtersForm = document.querySelector('.img-filters__form');
-let activeButton = document.querySelector('.img-filters__button--active');
+let activeBtn = document.querySelector('.img-filters__button--active');
 
 const filters = {
-  'filter-default': () => pictures.slice(),
-  'filter-random': () => shuffle(pictures.slice()).slice(0, RANDOM_PICTURES_MAX),
-  'filter-discussed': () => pictures.slice().sort((first, second) => second.comments.length - first.comments.length ),
+  'filter-default': () => photos.slice(),
+  'filter-random': () => shuffleArray(photos.slice()).slice(0, RANDOM_PICTURES_COUNT),
+  'filter-discussed': () => photos.slice().sort((first, second) => second.comments.length - first.comments.length ),
 };
 
 const applyFilters = (id) =>{
-  removePictures();
-  createPictures(filters[id]());
+  removePhotos();
+  renderPhotos(filters[id]());
 };
 
-
 const toogleButtons = (evt) => {
-  activeButton.classList.remove('img-filters__button--active');
-  activeButton = evt.target;
-  activeButton.classList.add('img-filters__button--active');
+  activeBtn.classList.remove('img-filters__button--active');
+  activeBtn = evt.target;
+  activeBtn.classList.add('img-filters__button--active');
 };
 
 const onFilterFormClick = debounce((evt) => {
@@ -33,8 +32,8 @@ const onFilterFormClick = debounce((evt) => {
   }
 });
 
-const initFilters = () => {
+const initializeFilters = () => {
   filtersForm.addEventListener('click', onFilterFormClick);
 };
 
-export{initFilters};
+export {initializeFilters};

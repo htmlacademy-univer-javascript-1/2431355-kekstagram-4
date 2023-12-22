@@ -1,39 +1,34 @@
-import {showBigPicture} from './big-picture.js';
+import { showBigPhoto } from './big-picture.js';
 
 const pictureContainer = document.querySelector('.pictures');
 const pictureFragments = document.createDocumentFragment();
-const picturesTemplate = document.querySelector('#picture')
-  .content
-  .querySelector('a');
+const picturesTemplate = document.querySelector('#picture').content.querySelector('a');
 
-const removePictures = () => {
+const removePhotos = () => {
   document.querySelectorAll('.picture').forEach((photo) => photo.remove());
 };
 
-const createPicture = (picture) => {
-  const currentPicture = picturesTemplate.cloneNode(true);
+const createPhoto = (picture) => {
+  const currentPhoto = picturesTemplate.cloneNode(true);
+  currentPhoto.querySelector('img').src = picture.url;
+  currentPhoto.querySelector('img').alt = picture.description;
+  currentPhoto.querySelector('.picture__comments').textContent = picture.comments.length;
+  currentPhoto.querySelector('.picture__likes').textContent = picture.likes;
 
-  currentPicture.querySelector('img').src = picture.url;
-  currentPicture.querySelector('img').alt = picture.description;
-  currentPicture.querySelector('.picture__comments').textContent = picture.comments.length;
-  currentPicture.querySelector('.picture__likes').textContent = picture.likes;
-
-
-  const onPictureClick = (evt) => {
+  const onPhotoClick = (evt) => {
     evt.preventDefault();
-    showBigPicture(picture);
+    showBigPhoto(picture);
   };
-  currentPicture.dataset.id = picture.id;
-  currentPicture.addEventListener('click', onPictureClick);
-  pictureFragments.append(currentPicture);
+  currentPhoto.dataset.id = picture.id;
+  currentPhoto.addEventListener('click', onPhotoClick);
+  pictureFragments.append(currentPhoto);
 };
 
-const createPictures = (pictures) => {
+const renderPhotos = (pictures) => {
   pictures.forEach((picture) => {
-    createPicture(picture);
+    createPhoto(picture);
   });
-
   pictureContainer.append(pictureFragments);
 };
 
-export {createPictures, removePictures};
+export {renderPhotos, removePhotos};
