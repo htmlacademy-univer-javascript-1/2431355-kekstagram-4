@@ -16,7 +16,7 @@ const commentField = document.querySelector('.text__description');
 
 let errorMessage = '';
 
-const error = () => errorMessage;
+const getError = () => errorMessage;
 
 const hashtagHandler = (value) =>{
   errorMessage = '';
@@ -67,7 +67,7 @@ const hashtagHandler = (value) =>{
   });
 };
 
-const onHashtagInput = () =>{
+const onFieldInput = () =>{
   if (pristine.validate()){
     submitBtn.disabled = false;
   }
@@ -80,13 +80,14 @@ function validateComment (value) {
   return value.length <= MAX_MESSAGE_LENGTH;
 }
 
-pristine.addValidator(inputHashtag, hashtagHandler, error, 2, false);
+pristine.addValidator(inputHashtag, hashtagHandler, getError, 2, false);
 pristine.addValidator(commentField, validateComment, 'Комментарий до 140 символов');
 
-inputHashtag.addEventListener('input', onHashtagInput);
+inputHashtag.addEventListener('input', onFieldInput);
+commentField.addEventListener('input', onFieldInput);
 formUpload.addEventListener('submit', (evt) => {
   evt.preventDefault();
   pristine.validate();
 });
-export {pristine};
+export {pristine, submitBtn};
 

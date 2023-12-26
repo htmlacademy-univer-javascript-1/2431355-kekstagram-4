@@ -1,5 +1,5 @@
 import { isEscKey } from './util.js';
-import { pristine } from './validate-form.js';
+import { pristine, submitBtn } from './validate-form.js';
 import { initRadios, resetFilters } from './effects.js';
 import { sendData } from './api.js';
 import { onSuccess, onError } from './form-submit.js';
@@ -92,6 +92,7 @@ const closeForm =  () => {
 
 function onCloseFormClick (evt) {
   evt.preventDefault();
+  submitBtn.disabled = false;
   closeForm();
 }
 
@@ -102,6 +103,7 @@ function onCloseFormEscDown (evt) {
   !body.querySelector('.error'))
   {
     evt.preventDefault();
+    submitBtn.disabled = false;
     closeForm();
   }
 }
